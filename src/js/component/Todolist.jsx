@@ -7,11 +7,16 @@ let number = 0;
 const Todolist = () => {
   const [input, setInput] = useState("");
   const [todoValues, handleAddTodo, handleDeleteTodo] = useTodo([]);
+
+  const isRepeat = (string) => {
+    return todoValues.some(({value}) => value === string);
+  }
   
   const handleSubmit = (e, value) => {
-    // validacion
-    if (e === null || typeof value !== "string") return;
     e.preventDefault();
+    // validacion
+    if (isRepeat(value) || !value) return setInput("");
+    
     const newTodo = {key: number++, value, deleted: false};
     handleAddTodo(newTodo);
     setInput("");
@@ -22,7 +27,7 @@ const Todolist = () => {
       <div id="container">
         <form name="form" onSubmit={(e) => {handleSubmit(e, input)}}> 
           <h1 className="todo-header">Todo List</h1>
-          <input id="addToDo" type="text" value={input} placeholder="Add to do here" onChange={({target}) => setInput(target.value)}/>
+          <input id="addToDo" type="text" value={input} placeholder="Add to do here" autoFocus onKeyUp={(e) => console.log(e.key)} onChange={({target}) => setInput(target.value)}/>
           <ul>
             { number > 0 && todoValues.map((item) => {
               console.log('again');
